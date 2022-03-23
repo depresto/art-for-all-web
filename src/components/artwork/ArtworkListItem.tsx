@@ -1,8 +1,9 @@
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 import React from 'react'
-import { Link, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
-import { ReactComponent as SavedOutlinedImg } from '../../assets/images/SavedOutlined.svg'
-import { ReactComponent as SavedSolidImg } from '../../assets/images/SavedSolid.svg'
+import SavedOutlinedImg from '../../assets/images/SavedOutlined.svg'
+import SavedSolidImg from '../../assets/images/SavedSolid.svg'
 import VoiceImg from '../../assets/images/voice.svg'
 import { useAuth } from '../../contexts/AuthContext'
 import { ArtworkProps } from '../../hooks/artwork'
@@ -14,7 +15,7 @@ export type ArtworkListProps = {
   onRefetch?: () => void
 }
 
-const StyledLink = styled(Link)`
+const StyledLink = styled.a`
   display: block;
 `
 
@@ -53,7 +54,7 @@ const StyledArtworkTitle = styled.h2`
 `
 
 const ArtworkListItem: React.FC<ArtworkListProps> = ({ artwork, margin = false, onRefetch }) => {
-  const history = useHistory()
+  const router = useRouter()
   const { currentMemberId } = useAuth()
   const { insertMemberArtworkCollection, deleteMemberArtworkCollection } = useMemberArtworkCollectionMutation()
 
@@ -61,9 +62,11 @@ const ArtworkListItem: React.FC<ArtworkListProps> = ({ artwork, margin = false, 
     <div className="mb-4">
       <StyledArtworkTitleWrapper className="py-2">
         <div className="grow">
-          <StyledLink to={`/artwork/${artwork.id}`}>
-            <StyledArtworkTitle>{artwork.title}</StyledArtworkTitle>
-          </StyledLink>
+          <Link href={`/artwork/${artwork.id}`} passHref>
+            <StyledLink>
+              <StyledArtworkTitle>{artwork.title}</StyledArtworkTitle>
+            </StyledLink>
+          </Link>
         </div>
         <div className="ml-2">
           {currentMemberId ? (
@@ -83,7 +86,7 @@ const ArtworkListItem: React.FC<ArtworkListProps> = ({ artwork, margin = false, 
                     await insertMemberArtworkCollection(artwork.id)
                     onRefetch?.()
                   } else {
-                    history.push('/auth')
+                    router.push('/auth')
                   }
                 }}
               />
@@ -92,18 +95,20 @@ const ArtworkListItem: React.FC<ArtworkListProps> = ({ artwork, margin = false, 
         </div>
       </StyledArtworkTitleWrapper>
 
-      <StyledLink to={`/artwork/${artwork.id}`}>
-        {artwork.featureImageUrl && (
-          <StyledImageWrapper>
-            <StyledImageBg
-              bgUrl={artwork.featureImageUrl}
-              margin={margin}
-              title={`這是一張圖片，作品名稱 ${artwork.title}`}
-            />
-            <img className="icon" src={VoiceImg} alt="" />
-          </StyledImageWrapper>
-        )}
-      </StyledLink>
+      <Link href={`/artwork/${artwork.id}`} passHref>
+        <StyledLink>
+          {artwork.featureImageUrl && (
+            <StyledImageWrapper>
+              <StyledImageBg
+                bgUrl={artwork.featureImageUrl}
+                margin={margin}
+                title={`這是一張圖片，作品名稱 ${artwork.title}`}
+              />
+              <img className="icon" src={VoiceImg} alt="" />
+            </StyledImageWrapper>
+          )}
+        </StyledLink>
+      </Link>
     </div>
   )
 }

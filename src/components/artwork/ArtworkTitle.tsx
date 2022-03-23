@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { ReactComponent as SavedOutlinedImg } from '../../assets/images/SavedOutlined.svg'
-import { ReactComponent as SavedSolidImg } from '../../assets/images/SavedSolid.svg'
+import SavedOutlinedImg from '../../assets/images/SavedOutlined.svg'
+import SavedSolidImg from '../../assets/images/SavedSolid.svg'
 import VoiceImg from '../../assets/images/voice.png'
 import { useAudioPlayer } from '../../contexts/AudioPlayerContext'
 import { StyledTitleDiv, StyledTitleTextDiv } from '../common/TitleBlock'
@@ -37,7 +37,7 @@ const ArtworkTitle: React.FC<ArtworkTitleProps> = ({ title, saved, audioUrl, onC
 
         {audioUrl && (
           <StyledVoiceDiv onClick={() => setIsPlaying?.(true)}>
-            <img src={VoiceImg} alt="唸給你聽" />
+            <img src={VoiceImg.src} alt="唸給你聽" />
           </StyledVoiceDiv>
         )}
       </StyledTitleDiv>

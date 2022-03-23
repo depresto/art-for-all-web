@@ -1,6 +1,6 @@
 import { Breadcrumb } from 'antd'
+import Link from 'next/link'
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import TextImg from '../../assets/images/text.svg'
 import VoiceImg from '../../assets/images/voice.svg'
@@ -48,19 +48,19 @@ const ArtworkSection: React.FC<{ artwork: ArtworkProps; onRefetch?: () => void }
   return (
     <>
       <Breadcrumb className="px-4 py-4" separator=">">
-        <Breadcrumb.Item>
-          <Link to="/">首頁</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item>
-          <Link to="/exhibitions">展覽</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item>
-          {artwork.exhibitionIds.length > 0 ? (
-            <Link to={`/exhibition/${artwork.exhibitionIds[0]}`}>作品列表</Link>
-          ) : (
-            '作品列表'
-          )}
-        </Breadcrumb.Item>
+        <Link href="/" passHref>
+          <Breadcrumb.Item>首頁</Breadcrumb.Item>
+        </Link>
+        <Link href="/exhibitions" passHref>
+          <Breadcrumb.Item>展覽</Breadcrumb.Item>
+        </Link>
+        {artwork.exhibitionIds.length > 0 ? (
+          <Link href={`/exhibition/${artwork.exhibitionIds[0]}`} passHref>
+            <Breadcrumb.Item>作品列表</Breadcrumb.Item>
+          </Link>
+        ) : (
+          <Breadcrumb.Item>作品列表</Breadcrumb.Item>
+        )}
         <Breadcrumb.Item>作品賞析</Breadcrumb.Item>
       </Breadcrumb>
 

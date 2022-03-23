@@ -79,7 +79,7 @@ const ForgotPasswordPage: React.FC = () => {
                 </StyledSolidButton>
               </StyledBtnsDiv>
 
-              <StyledLinkButton type="link" onClick={() => history.push('/auth')}>
+              <StyledLinkButton type="link" onClick={() => router.push('/auth')}>
                 返回登入頁面
               </StyledLinkButton>
             </StyledFrom>
