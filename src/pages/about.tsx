@@ -1,5 +1,4 @@
 import { Breadcrumb } from 'antd'
-import Link from 'next/link'
 import React from 'react'
 import styled from 'styled-components'
 import AboutIcon01 from '../assets/images/about-icon-01.svg'
@@ -70,9 +69,7 @@ const AboutPage: React.FC = () => {
   return (
     <MainLayout title="關於我們" activeKey="aboutUs">
       <Breadcrumb className="px-4 py-4" separator=">">
-        <Link href="/" passHref>
-          <Breadcrumb.Item>首頁</Breadcrumb.Item>
-        </Link>
+        <Breadcrumb.Item href="/">首頁</Breadcrumb.Item>
         <Breadcrumb.Item>關於我們</Breadcrumb.Item>
       </Breadcrumb>
 

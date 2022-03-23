@@ -104,7 +104,9 @@ const ArtworkListItem: React.FC<ArtworkListProps> = ({ artwork, margin = false, 
                 margin={margin}
                 title={`這是一張圖片，作品名稱 ${artwork.title}`}
               />
-              <img className="icon" src={VoiceImg} alt="" />
+              <div className="icon">
+                <VoiceImg />
+              </div>
             </StyledImageWrapper>
           )}
         </StyledLink>
