@@ -88,7 +88,7 @@ const ModalTitle: React.FC = () => {
   const { currentMember } = useAuth()
   return (
     <>
-      <StyledAvatarImg src={currentMember?.avatarUrl || UserIconSrc} alt="大頭貼" />
+      <StyledAvatarImg src={currentMember?.avatarUrl || UserIconSrc.src || ''} alt="大頭貼" />
       <StyledAuthorNameSpan>{currentMember?.name}</StyledAuthorNameSpan>
     </>
   )
@@ -134,12 +134,12 @@ const ArtworkComment: React.FC<{
   return (
     <>
       <StyledNewCommentDiv onClick={() => setModalVisible(true)}>
-        <StyledAvatarImg src={currentMember?.avatarUrl || UserIconSrc} alt="大頭貼" />
+        <StyledAvatarImg src={currentMember?.avatarUrl || UserIconSrc.src} alt="大頭貼" />
         <StyledNewCommentSpan>我要評論</StyledNewCommentSpan>
       </StyledNewCommentDiv>
 
       {comments?.map(comment => (
-        <StyledCommentDiv>
+        <StyledCommentDiv key={comment.id}>
           <StyledAvatarImg src={comment.member.avatarUrl || ''} alt="大頭貼" />
           <StyledAuthorNameSpan>{comment.member.name}</StyledAuthorNameSpan>
 
