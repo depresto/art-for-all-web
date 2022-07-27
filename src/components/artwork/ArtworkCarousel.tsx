@@ -1,13 +1,18 @@
 import { Modal } from 'antd'
+import Image from 'next/image'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import ZoomInSvg from '../../assets/images/zoom-in.svg'
-import { StyledCarousel, StyledCarouselImage } from '../welcome/WelcomeCarousel'
+import { StyledCarousel } from '../welcome/WelcomeCarousel'
 
 const StyledArtworkCarousel = styled(StyledCarousel)`
   .slick-dots {
     margin-top: 30px;
     position: relative;
+  }
+  .image-wrapper {
+    width: 100%;
+    padding-bottom: 60%;
   }
 `
 
@@ -46,7 +51,9 @@ const ArtworkCarousel: React.FC<{ imageUrls?: string[] }> = ({ imageUrls }) => {
       <StyledArtworkCarousel>
         {imageUrls?.map((imageUrl, index) => (
           <StyledRelativeDiv key={index} onClick={() => showModal(imageUrl)}>
-            <StyledCarouselImage src={imageUrl} />
+            <div className="image-wrapper">
+              <Image src={imageUrl} layout="fill" alt="" objectFit="contain" />
+            </div>
 
             <StyledZoomInIconWrapper>
               <ZoomInSvg />

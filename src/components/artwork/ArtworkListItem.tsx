@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -27,6 +28,10 @@ const StyledImageWrapper = styled.div`
     left: 12px;
     width: 30px;
     height: 30px;
+  }
+  .image-wrapper {
+    width: 100%;
+    padding-bottom: 100%;
   }
 `
 const StyledImageBg = styled.div<{ bgUrl: string; margin: boolean }>`
@@ -99,11 +104,15 @@ const ArtworkListItem: React.FC<ArtworkListProps> = ({ artwork, margin = false, 
         <StyledLink>
           {artwork.featureImageUrl && (
             <StyledImageWrapper>
-              <StyledImageBg
-                bgUrl={artwork.featureImageUrl}
-                margin={margin}
-                title={`這是一張圖片，作品名稱 ${artwork.title}`}
-              />
+              <div className="image-wrapper">
+                <Image
+                  src={artwork.featureImageUrl}
+                  alt={`這是一張圖片，作品名稱 ${artwork.title}`}
+                  layout="fill"
+                  objectFit="cover"
+                />
+              </div>
+
               <div className="icon">
                 <VoiceImg />
               </div>
