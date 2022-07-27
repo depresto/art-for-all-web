@@ -17,7 +17,7 @@
     "axios": "^0.26.1",
     "jwt-decode": "^3.1.2",
     "link-to-inbox": "^1.2.0",
-    "next": "12.1.0",
+    "next": "12.2.3",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-player": "^2.10.0",
