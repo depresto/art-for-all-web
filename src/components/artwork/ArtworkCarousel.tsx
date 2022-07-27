@@ -49,7 +49,7 @@ const ArtworkCarousel: React.FC<{ imageUrls?: string[] }> = ({ imageUrls }) => {
             <StyledCarouselImage src={imageUrl} />
 
             <StyledZoomInIconWrapper>
-              <img src={ZoomInSvg} alt="放大圖片" />
+              <ZoomInSvg />
             </StyledZoomInIconWrapper>
           </StyledRelativeDiv>
         ))}
