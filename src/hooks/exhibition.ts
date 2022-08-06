@@ -102,7 +102,7 @@ export const useExhibitions = () => {
   const { loading, error, data, refetch } = useQuery<types.GET_EXHIBITIONS>(
     gql`
       query GET_EXHIBITIONS {
-        exhibition {
+        exhibition(order_by: { created_at: desc }) {
           id
           name
           featured_image
