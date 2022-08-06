@@ -24,7 +24,7 @@ export const useExhibition = (exhibitionId?: string) => {
           id
           name
           featured_image
-          exhibition_artworks {
+          exhibition_artworks(order_by: { artwork_id: asc }) {
             artwork {
               id
               featured_image
