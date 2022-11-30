@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['i.imgur.com', 'art-for-all.s3.amazonaws.com'],
+    domains: ['i.imgur.com', 'art-for-all.s3.amazonaws.com', 'art-for-all.s3.ap-northeast-1.amazonaws.com'],
   },
   webpack: (config, { isServer, dev }) => {
     config.module.rules.push({ test: /\.svg$/, use: ['@svgr/webpack'] })
