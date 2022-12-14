@@ -47,7 +47,7 @@ export const AuthProvider: React.FC = ({ children }) => {
   useEffect(() => {
     if (payload === null || payload.exp * 1000 < Date.now()) {
       setIsAuthenticating(true)
-      Axios.post(`${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/auth/refresh-token`, {}, { withCredentials: true })
+      Axios.post('/api/v1/auth/refresh-token', {}, { withCredentials: true })
         .then(({ data: { code, message, result } }) => {
           code === 'SUCCESS' ? setAuthToken(result.authToken) : setAuthToken(null)
         })
@@ -78,7 +78,7 @@ export const AuthProvider: React.FC = ({ children }) => {
         },
         register: async ({ name, email, password }) =>
           Axios.post(
-            `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/auth/register`,
+            '/api/v1/auth/register',
             {
               name,
               email,
@@ -94,30 +94,26 @@ export const AuthProvider: React.FC = ({ children }) => {
             }
           }),
         login: async ({ account, password }) =>
-          Axios.post(
-            `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/auth/general-login`,
-            { account, password },
-            { withCredentials: true },
-          ).then(({ data: { code, result } }) => {
-            if (code !== 'SUCCESS') {
-              setAuthToken(null)
-              throw new Error(code)
-            } else if (result === null) {
-              window.location.assign(`/check-email?email=${account}&type=reset-password`)
-            } else {
-              setAuthToken(result.authToken)
-            }
-          }),
-        logout: async () =>
-          Axios.post(`${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/auth/logout`, {}, { withCredentials: true }).then(
+          Axios.post('/api/v1/auth/general-login', { account, password }, { withCredentials: true }).then(
             ({ data: { code, result } }) => {
-              if (code === 'SUCCESS') {
+              if (code !== 'SUCCESS') {
                 setAuthToken(null)
-              } else {
                 throw new Error(code)
+              } else if (result === null) {
+                window.location.assign(`/check-email?email=${account}&type=reset-password`)
+              } else {
+                setAuthToken(result.authToken)
               }
             },
           ),
+        logout: async () =>
+          Axios.post('/api/v1/auth/logout', {}, { withCredentials: true }).then(({ data: { code, result } }) => {
+            if (code === 'SUCCESS') {
+              setAuthToken(null)
+            } else {
+              throw new Error(code)
+            }
+          }),
       }}
     >
       {children}

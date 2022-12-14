@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "typegen": "graphql-codegen --config codegen.js",
+    "typegen": "graphql-code-generator --config ./codegen.ts",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -16,11 +16,16 @@
     "antd": "^4.24.5",
     "axios": "^0.26.1",
     "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
     "dayjs": "^1.11.7",
     "express": "^4.18.2",
+    "express-jwt": "^7.7.7",
+    "express-session": "^1.17.3",
+    "ioredis": "^5.2.4",
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^3.1.2",
     "link-to-inbox": "^1.2.0",
+    "mailgun.js": "^8.0.6",
     "next": "12.2.3",
     "next-connect": "^0.13.0",
     "react": "17.0.2",
@@ -29,7 +34,7 @@
     "react-responsive": "^9.0.2",
     "styled-components": "^5.3.6",
     "swiper": "^8.4.5",
-    "yup": "^0.32.11"
+    "yup": "^1.0.0-beta.8"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^2.16.1",
@@ -37,6 +42,11 @@
     "@graphql-codegen/typescript": "^2.8.5",
     "@graphql-codegen/typescript-operations": "^2.5.10",
     "@svgr/webpack": "^6.5.1",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.15",
+    "@types/express-session": "^1.17.5",
+    "@types/ms": "^0.7.31",
     "@types/node": "17.0.22",
     "@types/react": "17.0.42",
     "@types/react-responsive": "^8.0.5",
@@ -48,6 +58,6 @@
     "lint-staged": "^12.5.0",
     "organize-imports-cli": "^0.9.0",
     "prettier": "^2.8.1",
-    "typescript": "4.6.2"
+    "typescript": "4.9.4"
   }
 }

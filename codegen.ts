@@ -1,21 +1,22 @@
-const { loadEnvConfig } = require('@next/env')
+import { CodegenConfig } from '@graphql-codegen/cli'
+import { loadEnvConfig } from '@next/env'
 const projectDir = process.cwd()
 loadEnvConfig(projectDir)
 
-const config = {
+const config: CodegenConfig = {
   overwrite: true,
   schema: [
     {
       'https://hasura.art-for-all.tw/v1/graphql': {
         headers: {
-          'X-Hasura-Admin-Secret': process.env.GRAPHQL_ADMIN_SECRET,
+          'X-Hasura-Admin-Secret': process.env.GRAPHQL_ADMIN_SECRET ?? '',
         },
       },
     },
   ],
-  documents: ['./packages/gql/src/*.ts', './apps/**/src/**/*.ts', './apps/**/src/**/*.tsx'],
+  documents: ['./src/**/*.tsx', './src/**/*.ts'],
   generates: {
-    'packages/gql/types.d.ts': {
+    './src/types.d.ts': {
       plugins: ['typescript', 'typescript-operations'],
       config: {
         preResolveTypes: true,
