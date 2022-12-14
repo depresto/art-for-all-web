@@ -1,7 +1,7 @@
-import { Router } from 'express'
+import nc from 'next-connect'
 import { AuthController } from '../controllers/auth.controller'
 
-const authRouter = Router()
+const authRouter = nc()
 
 authRouter.post('/register', AuthController.registerHandler)
 authRouter.post('/change-password', AuthController.changePasswordHandler)
