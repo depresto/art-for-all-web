@@ -3,10 +3,10 @@ import { BatchHttpLink } from '@apollo/client/link/batch-http'
 import { onError } from '@apollo/client/link/error'
 
 const batchHttpLink = new BatchHttpLink({
-  uri: `https://${process.env.NEXT_PUBLIC_HASURA_HOST}/v1/graphql`,
+  uri: `https://${process.env.NEXT_PUBLIC_GRAPHQL_HOST}/v1/graphql`,
   headers: { batch: 'true' },
 })
-const httpLink = createHttpLink({ uri: `https://${process.env.NEXT_PUBLIC_HASURA_HOST}/v1/graphql` })
+const httpLink = createHttpLink({ uri: `https://${process.env.NEXT_PUBLIC_GRAPHQL_HOST}/v1/graphql` })
 const httpLinks = split(operation => operation.getContext().important === true, httpLink, batchHttpLink)
 const authLink = new ApolloLink((operation, forward) => {
   operation.setContext({
