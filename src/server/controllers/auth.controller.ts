@@ -55,7 +55,7 @@ export class AuthController {
     try {
       await AuthController._deliverLastLoggedInTask(member.id)
       if (req.session) {
-        req.session = member.id
+        ;(req.session as any)['afa'] = member.id
       }
     } catch (error) {
       console.error(error)
@@ -147,7 +147,7 @@ export class AuthController {
     }
   }
   public static refreshTokenHandler: RequestHandler = async (req, res: ApiResponse) => {
-    const memberId = req.session && req.session
+    const memberId = req.session && (req.session as any)['afa']
     if (!memberId) {
       return res.send({ code: 'E_NO_MEMBER', message: 'session expired', result: null })
     }
@@ -204,7 +204,7 @@ export class AuthController {
     }
     AuthController._deliverLastLoggedInTask(member.id)
     if (req.session) {
-      req.session = member.id
+      ;(req.session as any)['afa'] = member.id
     }
 
     return res
