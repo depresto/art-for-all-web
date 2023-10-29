@@ -1,13 +1,14 @@
-import Link from "next/link";
-import React from "react";
-import styled from "styled-components";
-import SwiperCore, { Navigation } from "swiper";
-import "swiper/css";
-import "swiper/css/navigation";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { AudioBookBriefProps } from "../../hooks/audioBook";
+import Link from 'next/link'
+import React from 'react'
+import styled from 'styled-components'
+import SwiperCore from 'swiper'
+import 'swiper/css'
+import 'swiper/css/navigation'
+import { Navigation } from 'swiper/modules'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { AudioBookBriefProps } from '../../hooks/audioBook'
 
-SwiperCore.use([Navigation]);
+SwiperCore.use([Navigation])
 
 const StyledAudioBookListSliderWrapperDiv = styled.div`
   .swiper-slide {
@@ -55,15 +56,15 @@ const StyledAudioBookListSliderWrapperDiv = styled.div`
     color: white;
     font-weight: bold;
   }
-`;
+`
 const AudioBookListSlider: React.FC<{
-  audioBooks: AudioBookBriefProps[];
-  categoryId: number;
+  audioBooks: AudioBookBriefProps[]
+  categoryId: number
 }> = ({ audioBooks, categoryId }) => {
   return (
     <StyledAudioBookListSliderWrapperDiv>
       <Swiper navigation={true} className="audio-book-list-slider" loop>
-        {audioBooks.map((audioBook) => (
+        {audioBooks.map(audioBook => (
           <SwiperSlide key={audioBook.id}>
             <Link href={`/audio-book/${categoryId}`} passHref>
               <a>
@@ -84,7 +85,7 @@ const AudioBookListSlider: React.FC<{
         ))}
       </Swiper>
     </StyledAudioBookListSliderWrapperDiv>
-  );
-};
+  )
+}
 
-export default AudioBookListSlider;
+export default AudioBookListSlider

@@ -14,7 +14,12 @@ const StyledContentDiv = styled.div`
   margin-top: 100px;
 `
 
-const MainLayout: React.FC<LayoutProps> = ({ children, title = '', noBackButton, expanded = false }) => {
+const MainLayout: React.FC<React.PropsWithChildren<LayoutProps>> = ({
+  children,
+  title = '',
+  noBackButton,
+  expanded = false,
+}) => {
   const [collapse, setCollapse] = useState(true)
   return (
     <DefaultLayout collapsed={collapse}>

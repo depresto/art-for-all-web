@@ -1,12 +1,12 @@
-import { CaretRightOutlined } from "@ant-design/icons";
-import React, { useCallback, useContext, useEffect, useState } from "react";
-import ReactPlayer from "react-player";
-import styled from "styled-components";
-import Backward5Icon from "../assets/images/backward-5.svg";
-import Forward5Icon from "../assets/images/forward-5.svg";
-import PauseIcon from "../assets/images/pause.svg";
-import PlayIcon from "../assets/images/play.svg";
-import StopButton from "../assets/images/stop-button.svg";
+import { CaretRightOutlined } from '@ant-design/icons'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
+import ReactPlayer from 'react-player'
+import styled from 'styled-components'
+import Backward5Icon from '../assets/images/backward-5.svg'
+import Forward5Icon from '../assets/images/forward-5.svg'
+import PauseIcon from '../assets/images/pause.svg'
+import PlayIcon from '../assets/images/play.svg'
+import StopButton from '../assets/images/stop-button.svg'
 
 export const StyledFixedBottomDiv = styled.div`
   width: 100%;
@@ -82,7 +82,7 @@ export const StyledFixedBottomDiv = styled.div`
       color: white;
     }
   }
-`;
+`
 const StyledPlayerDiv = styled.div`
   width: 100%;
   height: 50px;
@@ -120,42 +120,42 @@ const StyledPlayerDiv = styled.div`
       }
     }
   }
-`;
+`
 
 export const formatPlayerTime = (totalSecond: number) => {
-  const second = Math.floor(totalSecond % 60);
-  const minute = Math.floor(totalSecond / 60);
-  const hour = Math.floor(totalSecond / 3600);
+  const second = Math.floor(totalSecond % 60)
+  const minute = Math.floor(totalSecond / 60)
+  const hour = Math.floor(totalSecond / 3600)
   return {
     second,
     minute,
     hour,
-  };
-};
+  }
+}
 
 export type AudioPlaylistProps = {
-  id: number;
-  title: string;
-  audioUrl: string;
-  audioCoverImageUrl: string;
-};
+  id: number
+  title: string
+  audioUrl: string
+  audioCoverImageUrl: string
+}
 
 type AudioPlayerContextProps = {
-  isPlaying: boolean;
-  isPlayerShown: boolean;
-  currentAudio: AudioPlaylistProps | null;
-  audioPlaylist: AudioPlaylistProps[];
-  currentSeconds: number;
-  duration: number;
-  playerRef?: ReactPlayer | null;
-  setIsPlaying?: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsPlayerShown?: React.Dispatch<React.SetStateAction<boolean>>;
-  setAudio?: (audio: AudioPlaylistProps | null) => void;
-  setAudioCoverImageUrl?: React.Dispatch<React.SetStateAction<string | null>>;
-  setAudioPlaylist?: React.Dispatch<React.SetStateAction<AudioPlaylistProps[]>>;
-  setDuration?: React.Dispatch<React.SetStateAction<number>>;
-  setCurrentSeconds?: React.Dispatch<React.SetStateAction<number>>;
-};
+  isPlaying: boolean
+  isPlayerShown: boolean
+  currentAudio: AudioPlaylistProps | null
+  audioPlaylist: AudioPlaylistProps[]
+  currentSeconds: number
+  duration: number
+  playerRef?: ReactPlayer | null
+  setIsPlaying?: React.Dispatch<React.SetStateAction<boolean>>
+  setIsPlayerShown?: React.Dispatch<React.SetStateAction<boolean>>
+  setAudio?: (audio: AudioPlaylistProps | null) => void
+  setAudioCoverImageUrl?: React.Dispatch<React.SetStateAction<string | null>>
+  setAudioPlaylist?: React.Dispatch<React.SetStateAction<AudioPlaylistProps[]>>
+  setDuration?: React.Dispatch<React.SetStateAction<number>>
+  setCurrentSeconds?: React.Dispatch<React.SetStateAction<number>>
+}
 
 const defaultPlayerContext = {
   isPlaying: false,
@@ -164,52 +164,47 @@ const defaultPlayerContext = {
   audioPlaylist: [],
   currentSeconds: 0,
   duration: 0,
-};
+}
 
-const AudioPlayerContext =
-  React.createContext<AudioPlayerContextProps>(defaultPlayerContext);
+const AudioPlayerContext = React.createContext<AudioPlayerContextProps>(defaultPlayerContext)
 
-export const AudioPlayerProvider: React.FC = ({ children }) => {
-  const [playerRef, setPlayerRef] = useState<ReactPlayer | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [hasPlayed, setHasPlayed] = useState(false);
-  const [isPlayerShown, setIsPlayerShown] = useState(false);
-  const [currentAudio, setCurrentAudio] = useState<AudioPlaylistProps | null>(
-    null
-  );
-  const [audioPlaylist, setAudioPlaylist] = useState<AudioPlaylistProps[]>([]);
+export const AudioPlayerProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+  const [playerRef, setPlayerRef] = useState<ReactPlayer | null>(null)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [hasPlayed, setHasPlayed] = useState(false)
+  const [isPlayerShown, setIsPlayerShown] = useState(false)
+  const [currentAudio, setCurrentAudio] = useState<AudioPlaylistProps | null>(null)
+  const [audioPlaylist, setAudioPlaylist] = useState<AudioPlaylistProps[]>([])
 
-  const [duration, setDuration] = useState(0);
-  const [currentSeconds, setCurrentSeconds] = useState(0);
+  const [duration, setDuration] = useState(0)
+  const [currentSeconds, setCurrentSeconds] = useState(0)
 
   const setAudio = useCallback((audio: AudioPlaylistProps | null) => {
-    setCurrentAudio(audio);
-  }, []);
+    setCurrentAudio(audio)
+  }, [])
 
   useEffect(() => {
     if (isPlaying) {
-      setIsPlayerShown(true);
-      setHasPlayed(true);
+      setIsPlayerShown(true)
+      setHasPlayed(true)
     }
-  }, [isPlaying]);
+  }, [isPlaying])
 
   useEffect(() => {
     if (!isPlayerShown) {
-      setIsPlaying(false);
+      setIsPlaying(false)
     }
-  }, [isPlayerShown]);
+  }, [isPlayerShown])
 
   const onProgressBarClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    const width = (event.target as HTMLDivElement).clientWidth;
-    const rect = (event.target as HTMLDivElement).getBoundingClientRect();
-    const x = event.clientX - rect.left;
+    const width = (event.target as HTMLDivElement).clientWidth
+    const rect = (event.target as HTMLDivElement).getBoundingClientRect()
+    const x = event.clientX - rect.left
 
-    playerRef?.seekTo((duration * x) / width);
-  };
+    playerRef?.seekTo((duration * x) / width)
+  }
 
-  const formattedRemainingPlayTime = formatPlayerTime(
-    duration - currentSeconds
-  );
+  const formattedRemainingPlayTime = formatPlayerTime(duration - currentSeconds)
 
   return (
     <AudioPlayerContext.Provider
@@ -235,21 +230,14 @@ export const AudioPlayerProvider: React.FC = ({ children }) => {
           <div className="player-wrapper">
             {hasPlayed && (
               <div className="progress-bar" onClick={onProgressBarClick}>
-                <div
-                  className="progress"
-                  style={{ width: `${(currentSeconds / duration) * 100}%` }}
-                ></div>
+                <div className="progress" style={{ width: `${(currentSeconds / duration) * 100}%` }}></div>
               </div>
             )}
 
             <div className="d-flex align-items-start play-info">
               <div>
                 {currentAudio?.audioCoverImageUrl && (
-                  <img
-                    className="cover-image"
-                    src={currentAudio.audioCoverImageUrl}
-                    alt=""
-                  />
+                  <img className="cover-image" src={currentAudio.audioCoverImageUrl} alt="" />
                 )}
               </div>
 
@@ -260,14 +248,10 @@ export const AudioPlayerProvider: React.FC = ({ children }) => {
                   <div className="time-left">
                     <span className="mr-1">剩餘時間</span>
                     {formattedRemainingPlayTime.hour > 0 && (
-                      <span className="mr-1">
-                        {formattedRemainingPlayTime.hour}時
-                      </span>
+                      <span className="mr-1">{formattedRemainingPlayTime.hour}時</span>
                     )}
                     {formattedRemainingPlayTime.minute > 0 && (
-                      <span className="mr-1">
-                        {formattedRemainingPlayTime.minute}分
-                      </span>
+                      <span className="mr-1">{formattedRemainingPlayTime.minute}分</span>
                     )}
                     <span>{formattedRemainingPlayTime.second}秒</span>
                   </div>
@@ -279,10 +263,9 @@ export const AudioPlayerProvider: React.FC = ({ children }) => {
                       <div
                         className="player-button mx-1"
                         onClick={() => {
-                          const previousSecond =
-                            currentSeconds - 5 <= 0 ? 0 : currentSeconds - 5;
-                          setCurrentSeconds?.(previousSecond);
-                          playerRef?.seekTo(previousSecond);
+                          const previousSecond = currentSeconds - 5 <= 0 ? 0 : currentSeconds - 5
+                          setCurrentSeconds?.(previousSecond)
+                          playerRef?.seekTo(previousSecond)
                         }}
                       >
                         <Backward5Icon />
@@ -291,12 +274,9 @@ export const AudioPlayerProvider: React.FC = ({ children }) => {
                       <div
                         className="player-button mx-1"
                         onClick={() => {
-                          const previousSecond =
-                            currentSeconds + 5 >= duration
-                              ? duration
-                              : currentSeconds + 5;
-                          setCurrentSeconds?.(previousSecond);
-                          playerRef?.seekTo(previousSecond);
+                          const previousSecond = currentSeconds + 5 >= duration ? duration : currentSeconds + 5
+                          setCurrentSeconds?.(previousSecond)
+                          playerRef?.seekTo(previousSecond)
                         }}
                       >
                         <Forward5Icon />
@@ -306,17 +286,11 @@ export const AudioPlayerProvider: React.FC = ({ children }) => {
 
                   <div className="mx-1">
                     {isPlaying ? (
-                      <div
-                        className="pause-button player-button"
-                        onClick={() => setIsPlaying(false)}
-                      >
+                      <div className="pause-button player-button" onClick={() => setIsPlaying(false)}>
                         <PauseIcon />
                       </div>
                     ) : (
-                      <div
-                        className="play-button player-button"
-                        onClick={() => setIsPlaying(true)}
-                      >
+                      <div className="play-button player-button" onClick={() => setIsPlaying(true)}>
                         <PlayIcon />
                       </div>
                     )}
@@ -331,26 +305,26 @@ export const AudioPlayerProvider: React.FC = ({ children }) => {
                 playing={isPlaying}
                 onEnded={() => {
                   if (audioPlaylist.length > 0) {
-                    const [audio, ...rest] = audioPlaylist;
+                    const [audio, ...rest] = audioPlaylist
                     if (audio) {
-                      setCurrentAudio(audio);
+                      setCurrentAudio(audio)
                     }
-                    setAudioPlaylist(rest);
+                    setAudioPlaylist(rest)
                   } else {
-                    setIsPlaying(false);
+                    setIsPlaying(false)
                   }
                 }}
-                onDuration={(duration) => {
-                  setDuration(duration);
-                  setCurrentSeconds(0);
+                onDuration={duration => {
+                  setDuration(duration)
+                  setCurrentSeconds(0)
                 }}
                 onProgress={({ playedSeconds }) => {
-                  setCurrentSeconds(playedSeconds);
+                  setCurrentSeconds(playedSeconds)
                 }}
                 onPause={() => {
-                  const currentTime = playerRef?.getCurrentTime();
+                  const currentTime = playerRef?.getCurrentTime()
                   if (currentTime !== duration) {
-                    setIsPlaying(false);
+                    setIsPlaying(false)
                   }
                 }}
                 onPlay={() => setIsPlaying(true)}
@@ -365,29 +339,21 @@ export const AudioPlayerProvider: React.FC = ({ children }) => {
         </StyledFixedBottomDiv>
       ) : null}
     </AudioPlayerContext.Provider>
-  );
-};
+  )
+}
 
-export const useAudioPlayer = () => useContext(AudioPlayerContext);
+export const useAudioPlayer = () => useContext(AudioPlayerContext)
 
 export const AudioPlayer: React.FC = () => {
-  const {
-    playerRef,
-    isPlaying,
-    currentSeconds,
-    duration,
-    setCurrentSeconds,
-    setIsPlaying,
-  } = useAudioPlayer();
+  const { playerRef, isPlaying, currentSeconds, duration, setCurrentSeconds, setIsPlaying } = useAudioPlayer()
   return (
     <StyledPlayerDiv>
       <div
         className="btn player-btn icon-custom"
         onClick={() => {
-          const previousSecond =
-            currentSeconds - 5 <= 0 ? 0 : currentSeconds - 5;
-          setCurrentSeconds?.(previousSecond);
-          playerRef?.seekTo(previousSecond);
+          const previousSecond = currentSeconds - 5 <= 0 ? 0 : currentSeconds - 5
+          setCurrentSeconds?.(previousSecond)
+          playerRef?.seekTo(previousSecond)
         }}
       >
         <Backward5Icon />
@@ -396,30 +362,26 @@ export const AudioPlayer: React.FC = () => {
         <div
           className="btn player-btn btn-stop"
           onClick={() => {
-            setIsPlaying?.(false);
+            setIsPlaying?.(false)
           }}
         >
           <StopButton />
         </div>
       ) : (
-        <div
-          className="btn player-btn btn-play"
-          onClick={() => setIsPlaying?.(true)}
-        >
+        <div className="btn player-btn btn-play" onClick={() => setIsPlaying?.(true)}>
           <CaretRightOutlined />
         </div>
       )}
       <div
         className="btn player-btn icon-custom"
         onClick={() => {
-          const previousSecond =
-            currentSeconds + 5 >= duration ? duration : currentSeconds + 5;
-          setCurrentSeconds?.(previousSecond);
-          playerRef?.seekTo(previousSecond);
+          const previousSecond = currentSeconds + 5 >= duration ? duration : currentSeconds + 5
+          setCurrentSeconds?.(previousSecond)
+          playerRef?.seekTo(previousSecond)
         }}
       >
         <Forward5Icon />
       </div>
     </StyledPlayerDiv>
-  );
-};
+  )
+}

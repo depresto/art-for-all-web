@@ -1,9 +1,9 @@
-import { Layout, Menu } from "antd";
-import { useRouter } from "next/router";
-import React from "react";
-import styled from "styled-components";
-import { useAuth } from "../../contexts/AuthContext";
-import { useResponsive } from "../common/Responsive";
+import { Layout, Menu } from 'antd'
+import { useRouter } from 'next/router'
+import React from 'react'
+import styled from 'styled-components'
+import { useAuth } from '../../contexts/AuthContext'
+import { useResponsive } from '../common/Responsive'
 
 export const StyledLayout = styled(Layout)`
   background: #fff;
@@ -12,7 +12,7 @@ export const StyledLayout = styled(Layout)`
   .ant-layout-has-sider {
     flex-direction: column;
   }
-`;
+`
 
 const StyledSider = styled(Layout.Sider)`
   height: 100vh;
@@ -26,10 +26,10 @@ const StyledSider = styled(Layout.Sider)`
   .ant-layout-sider-zero-width-trigger {
     display: none;
   }
-`;
+`
 export const StyledLayoutContent = styled(Layout.Content)`
   width: 100% !important;
-`;
+`
 const StyledMenuItem = styled(Menu.Item)`
   text-align: center;
   font-style: normal;
@@ -44,46 +44,38 @@ const StyledMenuItem = styled(Menu.Item)`
   margin-bottom: 0 !important;
   border-bottom: 1px solid #fff;
   height: auto !important;
-`;
+`
 
 type LayoutProps = {
-  collapsed?: boolean;
-};
+  collapsed?: boolean
+}
 
-const LayoutContainer: React.FC<LayoutProps> = ({ children, collapsed }) => {
-  const router = useRouter();
-  const { logout, currentMemberId } = useAuth();
-  const { isDesktop } = useResponsive();
+const LayoutContainer: React.FC<React.PropsWithChildren<LayoutProps>> = ({ children, collapsed }) => {
+  const router = useRouter()
+  const { logout, currentMemberId } = useAuth()
+  const { isDesktop } = useResponsive()
 
   const handleLogout = async () => {
     logout?.().then(() => {
-      router.push("/");
-    });
-  };
+      router.push('/')
+    })
+  }
 
   var logoutButton = (
     <StyledMenuItem key="logout" onClick={() => handleLogout()}>
       登出
     </StyledMenuItem>
-  );
+  )
   if (currentMemberId === null) {
-    logoutButton = <></>;
+    logoutButton = <></>
   }
 
   return (
     <StyledLayout>
       <StyledLayoutContent>{children}</StyledLayoutContent>
-      <StyledSider
-        collapsible
-        collapsedWidth={0}
-        width={isDesktop ? 500 : "100%"}
-        collapsed={collapsed}
-      >
+      <StyledSider collapsible collapsedWidth={0} width={isDesktop ? 500 : '100%'} collapsed={collapsed}>
         <Menu theme="dark" mode="inline">
-          <StyledMenuItem
-            key="guide"
-            onClick={() => router.push("/navigation")}
-          >
+          <StyledMenuItem key="guide" onClick={() => router.push('/navigation')}>
             網站導覽
           </StyledMenuItem>
           <StyledMenuItem key="faq">FAQ</StyledMenuItem>
@@ -91,14 +83,11 @@ const LayoutContainer: React.FC<LayoutProps> = ({ children, collapsed }) => {
         </Menu>
       </StyledSider>
     </StyledLayout>
-  );
-};
+  )
+}
 
-const DefaultLayout: React.FC<LayoutProps> = ({
-  children,
-  collapsed = true,
-}) => {
-  return <LayoutContainer collapsed={collapsed}>{children}</LayoutContainer>;
-};
+const DefaultLayout: React.FC<React.PropsWithChildren<LayoutProps>> = ({ children, collapsed = true }) => {
+  return <LayoutContainer collapsed={collapsed}>{children}</LayoutContainer>
+}
 
-export default DefaultLayout;
+export default DefaultLayout

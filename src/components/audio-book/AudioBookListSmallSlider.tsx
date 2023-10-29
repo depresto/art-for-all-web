@@ -1,13 +1,14 @@
-import Link from "next/link";
-import React, { useState } from "react";
-import styled from "styled-components";
-import SwiperCore, { Navigation } from "swiper";
-import "swiper/css";
-import "swiper/css/navigation";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { AudioBookBriefProps } from "../../hooks/audioBook";
+import Link from 'next/link'
+import React, { useState } from 'react'
+import styled from 'styled-components'
+import SwiperCore from 'swiper'
+import 'swiper/css'
+import 'swiper/css/navigation'
+import { Navigation } from 'swiper/modules'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { AudioBookBriefProps } from '../../hooks/audioBook'
 
-SwiperCore.use([Navigation]);
+SwiperCore.use([Navigation])
 
 const StyledAudioBookListSmallSliderWrapperDiv = styled.div`
   --swiper-navigation-size: 36px;
@@ -44,7 +45,7 @@ const StyledAudioBookListSmallSliderWrapperDiv = styled.div`
     text-overflow: ellipsis;
     overflow: hidden;
   }
-`;
+`
 const StyledAudioBookSmallIntroDiv = styled.div`
   letter-spacing: 0.1em;
   .title {
@@ -56,23 +57,23 @@ const StyledAudioBookSmallIntroDiv = styled.div`
     font-size: 12px;
     color: #303030;
   }
-`;
+`
 
 const AudioBookListSmallSlider: React.FC<{
-  audioBooks: AudioBookBriefProps[];
-  categoryId: number;
+  audioBooks: AudioBookBriefProps[]
+  categoryId: number
 }> = ({ audioBooks, categoryId }) => {
-  const [activeAudioBookIndex, setActiveAudioBookIndex] = useState(0);
-  const activeAudioBook = audioBooks[activeAudioBookIndex];
+  const [activeAudioBookIndex, setActiveAudioBookIndex] = useState(0)
+  const activeAudioBook = audioBooks[activeAudioBookIndex]
 
   return (
     <StyledAudioBookListSmallSliderWrapperDiv>
       <Swiper
         navigation={true}
         className="audio-book-list-slider"
-        onSlideChange={(swiper) => setActiveAudioBookIndex(swiper.activeIndex)}
+        onSlideChange={swiper => setActiveAudioBookIndex(swiper.activeIndex)}
       >
-        {audioBooks.map((audioBook) => (
+        {audioBooks.map(audioBook => (
           <SwiperSlide key={audioBook.id}>
             <Link href={`/audio-book/${categoryId}`} passHref>
               <a>
@@ -97,7 +98,7 @@ const AudioBookListSmallSlider: React.FC<{
         </Link>
       </StyledAudioBookSmallIntroDiv>
     </StyledAudioBookListSmallSliderWrapperDiv>
-  );
-};
+  )
+}
 
-export default AudioBookListSmallSlider;
+export default AudioBookListSmallSlider

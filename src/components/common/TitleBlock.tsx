@@ -44,7 +44,11 @@ export const StyledTitleTextDiv = styled.div`
   padding-left: 20px;
 `
 
-const TitleBlock: React.FC<{ margin?: boolean; className?: string }> = ({ margin, className, children }) => {
+const TitleBlock: React.FC<React.PropsWithChildren<{ margin?: boolean; className?: string }>> = ({
+  margin,
+  className,
+  children,
+}) => {
   return (
     <StyledTitleDiv className={className} margin={margin}>
       <h1 className="title-text">{children}</h1>

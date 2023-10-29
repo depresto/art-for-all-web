@@ -24,7 +24,13 @@ type AudioBookTypeTagProps = {
   index?: number
   onClick?: () => void
 }
-const AudioBookTypeTag: React.FC<AudioBookTypeTagProps> = ({ className, active, index = 0, onClick, children }) => {
+const AudioBookTypeTag: React.FC<React.PropsWithChildren<AudioBookTypeTagProps>> = ({
+  className,
+  active,
+  index = 0,
+  onClick,
+  children,
+}) => {
   return (
     <StyledAudioBookTypeTag className={`${className} ${active ? 'active' : ''}`} index={index} onClick={onClick}>
       {children}

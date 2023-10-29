@@ -20,7 +20,7 @@ const StyledDesktopLayout = styled(StyledLayout)`
 `
 const StyledMobileLayout = styled(StyledLayout)``
 
-const AppContainer: React.FC = ({ children }) => {
+const AppContainer: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
     <>
       <MediaQuery query="(min-device-width: 768px)">

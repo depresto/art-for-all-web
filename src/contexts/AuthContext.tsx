@@ -1,5 +1,5 @@
 import Axios from 'axios'
-import jwt_decode from 'jwt-decode'
+import { jwtDecode } from 'jwt-decode'
 import React, { useContext, useEffect, useState } from 'react'
 import { handleError } from '../helpers'
 import { UserRole } from '../types/general'
@@ -37,11 +37,11 @@ const defaultAuthContext: AuthContextProps = {
 
 const AuthContext = React.createContext<AuthContextProps>(defaultAuthContext)
 
-export const AuthProvider: React.FC = ({ children }) => {
+export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [isAuthenticating, setIsAuthenticating] = useState(defaultAuthContext.isAuthenticating)
   const [authToken, setAuthToken] = useState<string | null>(null)
 
-  const payload: PayloadProps | null = authToken ? (jwt_decode(authToken) as any) : null
+  const payload: PayloadProps | null = authToken ? (jwtDecode(authToken) as any) : null
 
   // refresh token if expired or unauthenticated
   useEffect(() => {
