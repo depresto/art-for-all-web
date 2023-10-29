@@ -67,10 +67,8 @@ const ArtworkListItem: React.FC<ArtworkListProps> = ({ artwork, margin = false, 
     <div className="mb-4">
       <StyledArtworkTitleWrapper className="py-2">
         <div className="grow">
-          <Link href={`/artwork/${artwork.id}`} passHref>
-            <StyledLink>
-              <StyledArtworkTitle>{artwork.title}</StyledArtworkTitle>
-            </StyledLink>
+          <Link href={`/artwork/${artwork.id}`} className="d-block">
+            <StyledArtworkTitle>{artwork.title}</StyledArtworkTitle>
           </Link>
         </div>
         <div className="ml-2">
@@ -100,25 +98,23 @@ const ArtworkListItem: React.FC<ArtworkListProps> = ({ artwork, margin = false, 
         </div>
       </StyledArtworkTitleWrapper>
 
-      <Link href={`/artwork/${artwork.id}`} passHref>
-        <StyledLink>
-          {artwork.featureImageUrl && (
-            <StyledImageWrapper>
-              <div className="image-wrapper">
-                <Image
-                  src={artwork.featureImageUrl}
-                  alt={`這是一張圖片，作品名稱 ${artwork.title}`}
-                  layout="fill"
-                  objectFit="cover"
-                />
-              </div>
+      <Link href={`/artwork/${artwork.id}`} className="d-block">
+        {artwork.featureImageUrl && (
+          <StyledImageWrapper>
+            <div className="image-wrapper">
+              <Image
+                src={artwork.featureImageUrl}
+                alt={`這是一張圖片，作品名稱 ${artwork.title}`}
+                layout="fill"
+                objectFit="cover"
+              />
+            </div>
 
-              <div className="icon">
-                <VoiceImg />
-              </div>
-            </StyledImageWrapper>
-          )}
-        </StyledLink>
+            <div className="icon">
+              <VoiceImg />
+            </div>
+          </StyledImageWrapper>
+        )}
       </Link>
     </div>
   )

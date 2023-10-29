@@ -66,20 +66,18 @@ const AudioBookListSlider: React.FC<{
       <Swiper navigation={true} className="audio-book-list-slider" loop>
         {audioBooks.map(audioBook => (
           <SwiperSlide key={audioBook.id}>
-            <Link href={`/audio-book/${categoryId}`} passHref>
-              <a>
-                <div>
-                  <div
-                    className="background-image"
-                    style={{
-                      backgroundImage: `url(${audioBook.featuredImageUrl})`,
-                    }}
-                  ></div>
-                  <div className="caption-title">
-                    <div className="caption-text">{audioBook.description}</div>
-                  </div>
+            <Link href={`/audio-book/${categoryId}`}>
+              <div>
+                <div
+                  className="background-image"
+                  style={{
+                    backgroundImage: `url(${audioBook.featuredImageUrl})`,
+                  }}
+                ></div>
+                <div className="caption-title">
+                  <div className="caption-text">{audioBook.description}</div>
                 </div>
-              </a>
+              </div>
             </Link>
           </SwiperSlide>
         ))}

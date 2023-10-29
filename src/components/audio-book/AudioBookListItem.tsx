@@ -58,23 +58,19 @@ const AudioBookListItem: React.FC<{
     <div className="mb-4">
       <StyledArtworkTitleWrapper className="py-2">
         <div className="grow">
-          <Link href={audioBookPath} passHref>
-            <a className="d-block">
-              <StyledArtworkTitle>{audioBookName}</StyledArtworkTitle>
-            </a>
+          <Link href={audioBookPath} className="d-block">
+            <StyledArtworkTitle>{audioBookName}</StyledArtworkTitle>
           </Link>
         </div>
       </StyledArtworkTitleWrapper>
 
-      <Link href={audioBookPath} passHref>
-        <a className="d-block">
-          <StyledImageWrapper>
-            <StyledImageBg bgUrl={audioBookImageUrl} margin={false} title={`這是一張圖片，作品名稱 ${audioBookName}`} />
-            <div className="icon">
-              <VoiceWhiteImg />
-            </div>
-          </StyledImageWrapper>
-        </a>
+      <Link href={audioBookPath} className="d-block">
+        <StyledImageWrapper>
+          <StyledImageBg bgUrl={audioBookImageUrl} margin={false} title={`這是一張圖片，作品名稱 ${audioBookName}`} />
+          <div className="icon">
+            <VoiceWhiteImg />
+          </div>
+        </StyledImageWrapper>
       </Link>
     </div>
   )

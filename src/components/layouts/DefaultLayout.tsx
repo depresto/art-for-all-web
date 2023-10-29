@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import styled from 'styled-components'
 import { useAuth } from '../../contexts/AuthContext'
-import { useResponsive } from '../common/Responsive'
 
 export const StyledLayout = styled(Layout)`
   background: #fff;
@@ -44,6 +43,8 @@ const StyledMenuItem = styled(Menu.Item)`
   margin-bottom: 0 !important;
   border-bottom: 1px solid #fff;
   height: auto !important;
+
+  border-radius: 0 !important;
 `
 
 type LayoutProps = {
@@ -53,7 +54,6 @@ type LayoutProps = {
 const LayoutContainer: React.FC<React.PropsWithChildren<LayoutProps>> = ({ children, collapsed }) => {
   const router = useRouter()
   const { logout, currentMemberId } = useAuth()
-  const { isDesktop } = useResponsive()
 
   const handleLogout = async () => {
     logout?.().then(() => {
@@ -73,12 +73,12 @@ const LayoutContainer: React.FC<React.PropsWithChildren<LayoutProps>> = ({ child
   return (
     <StyledLayout>
       <StyledLayoutContent>{children}</StyledLayoutContent>
-      <StyledSider collapsible collapsedWidth={0} width={isDesktop ? 500 : '100%'} collapsed={collapsed}>
+
+      <StyledSider collapsedWidth={0} width={160} collapsed={collapsed}>
         <Menu theme="dark" mode="inline">
           <StyledMenuItem key="guide" onClick={() => router.push('/navigation')}>
             網站導覽
           </StyledMenuItem>
-          <StyledMenuItem key="faq">FAQ</StyledMenuItem>
           {logoutButton}
         </Menu>
       </StyledSider>

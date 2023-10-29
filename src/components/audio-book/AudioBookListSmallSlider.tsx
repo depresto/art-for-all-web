@@ -75,26 +75,22 @@ const AudioBookListSmallSlider: React.FC<{
       >
         {audioBooks.map(audioBook => (
           <SwiperSlide key={audioBook.id}>
-            <Link href={`/audio-book/${categoryId}`} passHref>
-              <a>
-                <div
-                  className="background-image"
-                  style={{
-                    backgroundImage: `url(${audioBook.featuredImageUrl})`,
-                  }}
-                ></div>
-              </a>
+            <Link href={`/audio-book/${categoryId}`}>
+              <div
+                className="background-image"
+                style={{
+                  backgroundImage: `url(${audioBook.featuredImageUrl})`,
+                }}
+              ></div>
             </Link>
           </SwiperSlide>
         ))}
       </Swiper>
 
       <StyledAudioBookSmallIntroDiv className="px-2 py-1">
-        <Link href={`/audio-book/${categoryId}`} passHref>
-          <a>
-            <div className="title">{activeAudioBook?.title}</div>
-            <div className="description">{activeAudioBook?.description}</div>
-          </a>
+        <Link href={`/audio-book/${categoryId}`}>
+          <div className="title">{activeAudioBook?.title}</div>
+          <div className="description">{activeAudioBook?.description}</div>
         </Link>
       </StyledAudioBookSmallIntroDiv>
     </StyledAudioBookListSmallSliderWrapperDiv>

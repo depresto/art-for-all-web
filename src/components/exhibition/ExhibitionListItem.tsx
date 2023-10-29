@@ -14,15 +14,13 @@ const StyledImageWrapper = styled.div`
 
 const ExhibitionListItem: React.FC<ExhibitionProps & { margin?: boolean }> = ({ id, name, featuredImage, margin }) => {
   return (
-    <Link href={`/exhibition/${id}`}>
-      <a className="d-block mb-5">
-        <TitleBlock>{name}</TitleBlock>
-        <StyledImageWrapper>
-          {featuredImage && (
-            <Image src={featuredImage} alt={`這是一張圖片，展覽名稱 ${name}`} layout="fill" objectFit="cover" />
-          )}
-        </StyledImageWrapper>
-      </a>
+    <Link href={`/exhibition/${id}`} className="d-block mb-5">
+      <TitleBlock>{name}</TitleBlock>
+      <StyledImageWrapper>
+        {featuredImage && (
+          <Image src={featuredImage} alt={`這是一張圖片，展覽名稱 ${name}`} layout="fill" objectFit="cover" />
+        )}
+      </StyledImageWrapper>
     </Link>
   )
 }

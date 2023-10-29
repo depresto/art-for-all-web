@@ -1,4 +1,4 @@
-import { DownOutlined, LeftOutlined } from '@ant-design/icons'
+import { DownOutlined, LeftOutlined, MenuOutlined } from '@ant-design/icons'
 import { Col, Row } from 'antd'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -13,6 +13,10 @@ const StyledMenuBtn = styled.div<{ expanded: boolean }>`
   box-sizing: border-box;
   border-radius: 10px;
 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   color: #fff;
   font-size: 24px;
   text-align: center;
@@ -24,16 +28,22 @@ const StyledRow = styled(Row)`
 `
 
 const StyledTitleCol = styled(Col)`
-  text-align: center;
-  font-style: normal;
-  font-weight: bold;
-  font-size: 20px;
-  line-height: 1.5;
-  letter-spacing: 0.16em;
-
-  color: #1e5285;
-
   padding: 2px 0;
+
+  .title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    font-size: 20px;
+
+    text-align: center;
+    font-style: normal;
+    font-weight: bold;
+    line-height: 1.5;
+    letter-spacing: 0.16em;
+    color: #1e5285;
+  }
 `
 
 type HeaderProps = {
@@ -44,7 +54,7 @@ type HeaderProps = {
   onMenuClick?: () => void
 }
 
-const Header: React.FC<HeaderProps> = ({ title, expanded = false, noBackButton }) => {
+const Header: React.FC<HeaderProps> = ({ title, expanded = false, noBackButton, onMenuClick }) => {
   const router = useRouter()
 
   return (
@@ -57,7 +67,14 @@ const Header: React.FC<HeaderProps> = ({ title, expanded = false, noBackButton }
             </StyledMenuBtn>
           )}
         </Col>
-        <StyledTitleCol span={16}>{title}</StyledTitleCol>
+        <StyledTitleCol span={16}>
+          <div className="title">{title}</div>
+        </StyledTitleCol>
+        <Col span={4}>
+          <StyledMenuBtn expanded={expanded} onClick={onMenuClick}>
+            <MenuOutlined />
+          </StyledMenuBtn>
+        </Col>
       </StyledRow>
     </header>
   )
