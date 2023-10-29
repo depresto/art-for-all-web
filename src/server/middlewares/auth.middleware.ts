@@ -1,3 +1,4 @@
+import RedisStore from 'connect-redis'
 import session from 'express-session'
 import Redis from 'ioredis'
 import ms from 'ms'
@@ -7,13 +8,11 @@ export const createRedisClient = () => {
   return redisClient
 }
 
-const RedisStore = require('connect-redis')(session)
-
 export const createSessionMiddleware = () => {
   const redisClient = createRedisClient()
   return session({
     secret: process.env.SESSION_SECRET || '',
-    store: redisClient && new RedisStore({ client: redisClient }),
+    store: new RedisStore({ client: redisClient }),
     resave: false,
     saveUninitialized: true,
     cookie: {
