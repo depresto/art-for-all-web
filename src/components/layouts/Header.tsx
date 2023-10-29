@@ -71,9 +71,11 @@ const Header: React.FC<HeaderProps> = ({ title, expanded = false, noBackButton, 
           <div className="title">{title}</div>
         </StyledTitleCol>
         <Col span={4}>
-          <StyledMenuBtn expanded={expanded} onClick={onMenuClick}>
-            <MenuOutlined />
-          </StyledMenuBtn>
+          <div className="d-flex justify-content-end">
+            <StyledMenuBtn expanded={expanded} onClick={onMenuClick}>
+              <MenuOutlined />
+            </StyledMenuBtn>
+          </div>
         </Col>
       </StyledRow>
     </header>
