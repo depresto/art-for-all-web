@@ -23,9 +23,11 @@ const CheckEmailPage: React.FC = () => {
     }
   }, [email])
 
-  if (!isAuthenticating && isAuthenticated) {
-    router.push('/')
-  }
+  useEffect(() => {
+    if (!isAuthenticating && isAuthenticated) {
+      router.push('/')
+    }
+  }, [isAuthenticating, isAuthenticated, router])
 
   return (
     <DefaultLayout>

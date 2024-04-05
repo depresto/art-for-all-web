@@ -3,7 +3,7 @@
 import { Form, message, Tabs, Typography } from 'antd'
 import Axios from 'axios'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   StyledBtnsDiv,
   StyledFrom,
@@ -22,9 +22,11 @@ const ForgotPasswordPage: React.FC = () => {
   const { isAuthenticating, isAuthenticated } = useAuth()
   const [loading, setLoading] = useState(false)
 
-  if (!isAuthenticating && isAuthenticated) {
-    router.push('/')
-  }
+  useEffect(() => {
+    if (!isAuthenticating && isAuthenticated) {
+      router.push('/')
+    }
+  }, [isAuthenticating, isAuthenticated, router])
 
   const handleForgotPassword = () => {
     form.validateFields().then(values => {

@@ -3,7 +3,7 @@
 import { Tabs } from 'antd'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import LoginForm from '../components/auth/LoginForm'
 import SignupForm from '../components/auth/SignupForm'
 import { StyledTab } from '../components/common'
@@ -15,9 +15,11 @@ const LoginPage: NextPage = () => {
   const { isAuthenticating, isAuthenticated } = useAuth()
   const [activeTabKey, setActiveTabKey] = useState('login')
 
-  if (!isAuthenticating && isAuthenticated) {
-    router.push('/')
-  }
+  useEffect(() => {
+    if (!isAuthenticating && isAuthenticated) {
+      router.push('/')
+    }
+  }, [isAuthenticating, isAuthenticated, router])
 
   return (
     <MainLayout title="登入/註冊" activeKey="auth">

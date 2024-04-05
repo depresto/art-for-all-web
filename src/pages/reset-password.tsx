@@ -3,7 +3,7 @@
 import { Form, message, Tabs, Typography } from 'antd'
 import Axios from 'axios'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   StyledBtnsDiv,
   StyledFrom,
@@ -22,10 +22,12 @@ const ResetPasswordPage: React.FC = () => {
   const [form] = Form.useForm()
   const [loading, setLoading] = useState(false)
 
-  if (!token) {
-    message.error('該連結無效，請再試一次')
-    router.push('/forgot-password')
-  }
+  useEffect(() => {
+    if (!token) {
+      message.error('該連結無效，請再試一次')
+      router.push('/forgot-password')
+    }
+  }, [router, token])
 
   const handleForgotPassword = () => {
     form.validateFields().then(values => {

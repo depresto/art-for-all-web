@@ -24,16 +24,17 @@ const collectionItem = {
 
 const CollectionDetailPage: React.FC = () => {
   const { currentMemberId } = useAuth()
-  let { artworks } = useArtworks(currentMemberId || 0)
-  artworks = artworks.filter(item => item.saved === true)
+  const { artworks } = useArtworks(currentMemberId || 0)
 
   return (
     <MainLayout title="收藏" activeKey="collection">
       <StyledTitle>{collectionItem.name}</StyledTitle>
 
-      {artworks.map(artwork => (
-        <ArtworkListItem key={artwork.id} artwork={artwork} />
-      ))}
+      {artworks
+        .filter(item => item.saved === true)
+        .map(artwork => (
+          <ArtworkListItem key={artwork.id} artwork={artwork} />
+        ))}
     </MainLayout>
   )
 }
