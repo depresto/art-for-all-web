@@ -1,3 +1,5 @@
+'use client'
+
 import { Form, message, Tabs, Typography } from 'antd'
 import Axios from 'axios'
 import { useRouter } from 'next/router'

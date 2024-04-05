@@ -1,3 +1,5 @@
+'use client'
+
 import { useRouter } from 'next/router'
 import React from 'react'
 import CollectionList from '../../components/collection/CollectionList'

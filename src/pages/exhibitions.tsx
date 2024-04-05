@@ -1,3 +1,5 @@
+'use client'
+
 import { Breadcrumb, Skeleton } from 'antd'
 import React from 'react'
 import ExhibitionListItem from '../components/exhibition/ExhibitionListItem'

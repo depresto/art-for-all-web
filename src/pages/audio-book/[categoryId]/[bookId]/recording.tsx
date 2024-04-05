@@ -1,3 +1,5 @@
+'use client'
+
 import { CloseOutlined, SearchOutlined } from '@ant-design/icons'
 import { Button, Col, Row, Skeleton } from 'antd'
 import { useRouter } from 'next/router'

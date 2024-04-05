@@ -1,3 +1,5 @@
+'use client'
+
 import { MailOutlined } from '@ant-design/icons'
 import { Tabs, Typography } from 'antd'
 import { useRouter } from 'next/router'

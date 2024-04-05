@@ -1,7 +1,9 @@
+'use client'
+
 import { Tabs } from 'antd'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import LoginForm from '../components/auth/LoginForm'
 import SignupForm from '../components/auth/SignupForm'
 import { StyledTab } from '../components/common'

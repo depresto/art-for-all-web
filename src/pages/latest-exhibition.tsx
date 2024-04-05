@@ -1,5 +1,6 @@
+'use client'
+
 import { NextPage } from 'next'
-import React from 'react'
 import ArtworkListItem from '../components/artwork/ArtworkListItem'
 import FullLoadingBlock from '../components/common/FullLoadingBlock'
 import SearchInput from '../components/common/SearchInput'

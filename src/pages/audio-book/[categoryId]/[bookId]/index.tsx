@@ -1,3 +1,5 @@
+'use client'
+
 import { Breadcrumb, Skeleton } from 'antd'
 import { useRouter } from 'next/router'
 import React from 'react'
