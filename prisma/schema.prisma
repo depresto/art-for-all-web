@@ -1,0 +1,271 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Member {
+  id            BigInt    @id @default(autoincrement())
+  name          String?
+  email         String?
+  username      String?
+  password      String?
+  password_hash String?
+  role          String?
+  avatar_url    String?
+  refresh_token String?
+  category      Int?
+  login_at      DateTime? @db.Timestamptz(6)
+  created_at    DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at    DateTime? @db.Timestamptz(6)
+
+  comments                      ArtworkComment[]
+  favorites                     Favorite[]
+  member_artwork_collections    MemberArtworkCollection[]
+  member_audio_book_collections MemberAudioBookCollection[]
+  member_audio_book_favorites   MemberAudioBookFavorite[]
+  playlists                     Playlist[]
+  reviews                       Review[]
+
+  @@map("member")
+}
+
+model Creator {
+  id        String  @id @default(uuid()) @db.Uuid
+  name      String?
+  avatarUrl String?
+
+  artworks Artwork[]
+
+  @@map("creator")
+}
+
+model Museum {
+  id   BigInt  @id @default(autoincrement())
+  name String?
+
+  artworks Artwork[]
+
+  @@map("museum")
+}
+
+model Artwork {
+  id             BigInt  @id @default(autoincrement())
+  name           String
+  description    String?
+  featured_image String?
+  images         Json?
+  material       String?
+  size           String?
+  speech         String?
+  type           String?
+  years          Int?
+  creator_id     String? @db.Uuid
+  museum_id      BigInt
+
+  creator Creator? @relation(fields: [creator_id], references: [id])
+  museum  Museum   @relation(fields: [museum_id], references: [id])
+
+  comments                   ArtworkComment[]
+  exhibition_artworks        ExhibitionArtwork[]
+  favorites                  Favorite[]
+  member_artwork_collections MemberArtworkCollection[]
+  playlist_items             PlaylistItem[]
+  reviews                    Review[]
+
+  @@map("artwork")
+}
+
+model ArtworkComment {
+  id         Int       @id @default(autoincrement())
+  artwork_id BigInt
+  member_id  BigInt
+  content    String?
+  created_at DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at DateTime? @db.Timestamptz(6)
+
+  artwork Artwork @relation(fields: [artwork_id], references: [id])
+  member  Member  @relation(fields: [member_id], references: [id])
+
+  @@map("artwork_comment")
+}
+
+model Exhibition {
+  id             BigInt    @id @default(autoincrement())
+  name           String?
+  featured_image String?
+  created_at     DateTime? @default(now()) @db.Timestamptz(6)
+
+  exhibition_artworks ExhibitionArtwork[]
+
+  @@map("exhibition")
+}
+
+model ExhibitionArtwork {
+  id            BigInt    @id @default(autoincrement())
+  exhibition_id BigInt
+  artwork_id    BigInt
+  created_at    DateTime? @default(now()) @db.Timestamptz(6)
+
+  exhibition Exhibition @relation(fields: [exhibition_id], references: [id])
+  artwork    Artwork    @relation(fields: [artwork_id], references: [id])
+
+  @@map("exhibition_artwork")
+}
+
+model MemberArtworkCollection {
+  id         BigInt    @id @default(autoincrement())
+  member_id  BigInt
+  artwork_id BigInt
+  created_at DateTime? @default(now()) @db.Timestamptz(6)
+
+  member  Member  @relation(fields: [member_id], references: [id])
+  artwork Artwork @relation(fields: [artwork_id], references: [id])
+
+  @@map("member_artwork_collection")
+}
+
+model AudioBook {
+  id                 BigInt    @id @default(autoincrement())
+  title              String?
+  description        String?
+  content            String?
+  audio_url          String?
+  track_url          String?
+  featured_image_url String?
+  duration           Decimal?  @db.Decimal
+  creator_name       String?
+  language           String?
+  created_at         DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at         DateTime? @db.Timestamptz(6)
+
+  audio_book_categories         AudioBookCategory[]
+  audio_book_tags               AudioBookTag[]
+  member_audio_book_collections MemberAudioBookCollection[]
+  member_audio_book_favorites   MemberAudioBookFavorite[]
+
+  @@map("audio_book")
+}
+
+model Category {
+  id          BigInt    @id @default(autoincrement())
+  name        String?
+  description String?
+  type        String?
+  language    String?
+  created_at  DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at  DateTime? @db.Timestamptz(6)
+
+  audio_book_categories AudioBookCategory[]
+
+  @@map("category")
+}
+
+model AudioBookCategory {
+  audio_book_id BigInt
+  category_id   BigInt
+  created_at    DateTime? @default(now()) @db.Timestamptz(6)
+
+  audio_book AudioBook @relation(fields: [audio_book_id], references: [id])
+  category   Category  @relation(fields: [category_id], references: [id])
+
+  @@id([audio_book_id, category_id])
+  @@map("audio_book_category")
+}
+
+model Tag {
+  id         BigInt    @id @default(autoincrement())
+  name       String?
+  type       String?
+  language   String?
+  created_at DateTime? @default(now()) @db.Timestamptz(6)
+
+  audio_book_tags AudioBookTag[]
+
+  @@map("tag")
+}
+
+model AudioBookTag {
+  audio_book_id BigInt
+  tag_id        BigInt
+  created_at    DateTime? @default(now()) @db.Timestamptz(6)
+
+  audio_book AudioBook @relation(fields: [audio_book_id], references: [id])
+  tag        Tag       @relation(fields: [tag_id], references: [id])
+
+  @@id([audio_book_id, tag_id])
+  @@map("audio_book_tag")
+}
+
+model Favorite {
+  id         BigInt @id @default(autoincrement())
+  member_id  BigInt
+  artwork_id BigInt
+
+  member  Member  @relation(fields: [member_id], references: [id])
+  artwork Artwork @relation(fields: [artwork_id], references: [id])
+
+  @@map("favorite")
+}
+
+model MemberAudioBookCollection {
+  id            BigInt    @id @default(autoincrement())
+  member_id     BigInt
+  audio_book_id BigInt
+  created_at    DateTime? @default(now()) @db.Timestamptz(6)
+
+  member     Member    @relation(fields: [member_id], references: [id])
+  audio_book AudioBook @relation(fields: [audio_book_id], references: [id])
+
+  @@map("member_audio_book_collection")
+}
+
+model MemberAudioBookFavorite {
+  id            BigInt    @id @default(autoincrement())
+  member_id     BigInt
+  audio_book_id BigInt
+  created_at    DateTime? @default(now()) @db.Timestamptz(6)
+
+  member     Member    @relation(fields: [member_id], references: [id])
+  audio_book AudioBook @relation(fields: [audio_book_id], references: [id])
+
+  @@map("member_audio_book_favorite")
+}
+
+model Playlist {
+  id                BigInt  @id @default(autoincrement())
+  member_id         BigInt
+  exhibition_name   String?
+  exhibition_detail String?
+
+  member         Member         @relation(fields: [member_id], references: [id])
+  playlist_items PlaylistItem[]
+
+  @@map("playlist")
+}
+
+model PlaylistItem {
+  id          BigInt @id @default(autoincrement())
+  playlist_id BigInt
+  artwork_id  BigInt
+
+  playlist Playlist @relation(fields: [playlist_id], references: [id])
+  artwork  Artwork  @relation(fields: [artwork_id], references: [id])
+
+  @@map("playlist_item")
+}
+
+model Review {
+  id         BigInt  @id @default(autoincrement())
+  member_id  BigInt
+  artwork_id BigInt
+  feedback   String?
+
+  member  Member  @relation(fields: [member_id], references: [id])
+  artwork Artwork @relation(fields: [artwork_id], references: [id])
+
+  @@map("review")
+}

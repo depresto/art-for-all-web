@@ -1,14 +1,10 @@
 import bcrypt from 'bcryptjs'
 import crypto from 'crypto'
-import dayjs from 'dayjs'
 import { RequestHandler } from 'express'
 import jwt from 'jsonwebtoken'
 import { object, string } from 'yup'
-import * as types from '../../types'
+import { prisma } from '../../lib/prisma'
 import { ApiResponse, AuthRequest } from '../../types/shared'
-import { ADD_MEMBER, REGISTER_MEMBER, UPDATE_LOGIN_AT, UPDATE_MEMBER } from '../gql/mutations'
-import { GET_MEMBER_BY_REFRESH_TOKEN, GET_POSSIBLE_MEMBERS } from '../gql/queries'
-import { apolloServerClient } from '../helpers/apollo.server.client'
 import MgService from '../helpers/mailgun.client'
 import { getMember } from '../helpers/utils'
 
@@ -55,7 +51,7 @@ export class AuthController {
     try {
       await AuthController._deliverLastLoggedInTask(member.id)
       if (req.session) {
-        ;(req.session as any)['afa'] = member.id
+        ;(req.session as any)['afa'] = member.id.toString()
       }
     } catch (error) {
       console.error(error)
@@ -65,7 +61,7 @@ export class AuthController {
       message: 'successfully register a new member',
       result: {
         authToken: AuthController._signMemberJWT({
-          id: member.id,
+          id: Number(member.id),
           name: member.name,
           email: member.email,
           username: member.username,
@@ -162,7 +158,7 @@ export class AuthController {
       message: 'refresh a new auth token',
       result: {
         authToken: AuthController._signMemberJWT({
-          id: member.id,
+          id: Number(member.id),
           name: member.name,
           email: member.email,
           username: member.username,
@@ -204,7 +200,7 @@ export class AuthController {
     }
     AuthController._deliverLastLoggedInTask(member.id)
     if (req.session) {
-      ;(req.session as any)['afa'] = member.id
+      ;(req.session as any)['afa'] = member.id.toString()
     }
 
     return res
@@ -213,7 +209,7 @@ export class AuthController {
         message: 'login successfully',
         result: {
           authToken: AuthController._signMemberJWT({
-            id: member.id,
+            id: Number(member.id),
             name: member.name,
             email: member.email,
             username: member.username,
@@ -237,7 +233,7 @@ export class AuthController {
       return res.send({ code: 'E_NO_MEMBER', message: 'no member', result: null })
     }
     try {
-      await AuthController._setNewPassword(req.user.sub, newPassword)
+      await AuthController._setNewPassword(BigInt(req.user.sub), newPassword)
       return res.send({ code: 'SUCCESS', message: 'password updated successfully', result: null })
     } catch (err) {
       return res.send({ code: 'E_UPDATE_PASSWORD', message: err.message, result: null })
@@ -271,37 +267,18 @@ export class AuthController {
     }
     return res.send({ code: 'SUCCESS', message: 'logout successfully', result: null })
   }
-  private static _deliverLastLoggedInTask = async (memberId: string) => {
-    await apolloServerClient.mutate<types.UPDATE_LOGIN_AT, types.UPDATE_LOGIN_ATVariables>({
-      mutation: UPDATE_LOGIN_AT,
-      variables: {
-        memberId,
-        loginAt: dayjs(),
-      },
+  private static _deliverLastLoggedInTask = async (memberId: bigint) => {
+    await prisma.member.update({
+      where: { id: memberId },
+      data: { login_at: new Date() },
     })
-  }
-  private static _getMemberByRefreshToken = async (refreshToken: string) => {
-    const { data } = await apolloServerClient.query<
-      types.GET_MEMBER_BY_REFRESH_TOKEN,
-      types.GET_MEMBER_BY_REFRESH_TOKENVariables
-    >({
-      query: GET_MEMBER_BY_REFRESH_TOKEN,
-      variables: {
-        refreshToken,
-      },
-    })
-    const member = data.member.pop() || null
-    return member
   }
   private static _getMemberByUsernameOrEmail = async (usernameOrEmail: string) => {
-    const { data } = await apolloServerClient.query<types.GET_POSSIBLE_MEMBERS, types.GET_POSSIBLE_MEMBERSVariables>({
-      query: GET_POSSIBLE_MEMBERS,
-      variables: {
-        email: usernameOrEmail,
-        username: usernameOrEmail,
+    const member = await prisma.member.findFirst({
+      where: {
+        OR: [{ email: usernameOrEmail }, { username: usernameOrEmail }],
       },
     })
-    const member = data.member.pop() || null
     return member
   }
   private static _signMemberJWT = (
@@ -340,31 +317,23 @@ export class AuthController {
     },
     expiresIn = '1 day',
   ) => {
-    const claim = {
-      ...payload,
-      'https://hasura.io/jwt/claims': {
-        'x-hasura-allowed-roles': [payload.role],
-        'x-hasura-default-role': payload.role,
-        'x-hasura-user-id': payload.memberId.toString(),
-      },
-    }
-    if (!process.env.HASURA_JWT_SECRET) {
+    if (!process.env.JWT_SECRET) {
       throw new Error('no jwt secret')
     }
-    return jwt.sign(claim, process.env.HASURA_JWT_SECRET, { expiresIn })
+    return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn })
   }
-  private static _sendResetPasswordEmail = async ({ memberId }: { memberId: string }) => {
+  private static _sendResetPasswordEmail = async ({ memberId }: { memberId: bigint }) => {
     const mgService = new MgService()
     if (!mgService.isValid) {
       throw new Error('no mail service')
     }
-    const member = await getMember(memberId)
+    const member = await getMember(memberId.toString())
     if (!member.email) {
       throw new Error(`no email found for user ${member.id}`)
     }
     const resetPasswordToken = AuthController._signMemberJWT(
       {
-        id: member.id,
+        id: Number(member.id),
         name: member.name,
         email: member.email,
         username: member.username,
@@ -392,16 +361,15 @@ export class AuthController {
     password?: string
   }) => {
     const passwordHash = profile.password && (await bcrypt.hash(profile.password, BCRYPT_SALT))
-    const { data } = await apolloServerClient.mutate<types.REGISTER_MEMBER, types.REGISTER_MEMBERVariables>({
-      mutation: REGISTER_MEMBER,
-      variables: {
+    const member = await prisma.member.create({
+      data: {
         name: profile.name,
         email: profile.email,
         role: profile.role,
-        passwordHash,
+        password_hash: passwordHash,
       },
     })
-    return data?.insert_member?.returning[0] || null
+    return member
   }
   private static _addMember = async (profile: {
     role: string
@@ -411,29 +379,23 @@ export class AuthController {
     password: string
   }) => {
     const passwordHash = await bcrypt.hash(profile.password, BCRYPT_SALT)
-    const { data } = await apolloServerClient.mutate<types.ADD_MEMBER, types.ADD_MEMBERVariables>({
-      mutation: ADD_MEMBER,
-      variables: {
+    const member = await prisma.member.create({
+      data: {
         name: profile.name,
         email: profile.email,
         username: profile.username,
         role: profile.role,
         password: profile.role === 'basic-member' ? profile.password : null,
-        passwordHash,
+        password_hash: passwordHash,
       },
     })
-    return data?.insert_member?.returning[0] || null
+    return member
   }
-  private static _setNewPassword = async (memberId: string, newPassword: string) => {
+  private static _setNewPassword = async (memberId: bigint, newPassword: string) => {
     const newPasswordHash = await bcrypt.hash(newPassword, BCRYPT_SALT)
-    await apolloServerClient.mutate({
-      mutation: UPDATE_MEMBER,
-      variables: {
-        memberId,
-        updated: {
-          password_hash: newPasswordHash,
-        },
-      },
+    await prisma.member.update({
+      where: { id: memberId },
+      data: { password_hash: newPasswordHash },
     })
   }
 }

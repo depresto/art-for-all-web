@@ -1,13 +1,9 @@
-import * as types from '../../types'
-import { GET_MEMBER, GET_MEMBER_LIST } from '../gql/queries'
-import { apolloServerClient } from './apollo.server.client'
+import { prisma } from '../../lib/prisma'
 
 export const getMember = async (memberId: string) => {
-  const { data } = await apolloServerClient.query<types.GET_MEMBER, types.GET_MEMBERVariables>({
-    query: GET_MEMBER,
-    variables: { memberId },
+  const member = await prisma.member.findUnique({
+    where: { id: BigInt(memberId) },
   })
-  const member = data.member_by_pk
   if (!member) {
     throw new Error('找不到使用者')
   }
@@ -15,10 +11,7 @@ export const getMember = async (memberId: string) => {
 }
 
 export const getMemberList = async () => {
-  const { data } = await apolloServerClient.query<types.GET_MEMBER_LIST>({
-    query: GET_MEMBER_LIST,
-  })
-  const members = data.member
+  const members = await prisma.member.findMany()
   return members
 }
 

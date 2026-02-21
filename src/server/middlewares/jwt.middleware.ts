@@ -3,7 +3,7 @@ import { expressjwt as jwt } from 'express-jwt'
 
 const jwtMiddleware: RequestHandler = async (req, res, next) => {
   return jwt({
-    secret: process.env.HASURA_JWT_SECRET ?? '',
+    secret: process.env.JWT_SECRET ?? '',
     algorithms: ['HS256'],
   }).unless({
     path: [
